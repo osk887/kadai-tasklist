@@ -1,0 +1,8 @@
+<h1>タスク編集ページ</h1>
+
+<%= form_with(model: @task, local: true) do |t|%>
+  <%= t.label :content,"タスク編集"%>
+  <%= t.text_field :content %>
+  <%= t.submit "編集" %>
+<% end %>
+<%= link_to "タスク一覧へ", tasks_path %>
