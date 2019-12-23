@@ -17,7 +17,8 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     if @task.save
-      redirect_to tasks_url
+      redirect_to new_task_url
+      # tasks_url
     else
       flash.now[:danger] = "作成に失敗しました"
       render :new
