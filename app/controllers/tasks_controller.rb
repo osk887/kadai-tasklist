@@ -1,11 +1,13 @@
 class TasksController < ApplicationController
+  before_action :require_user_logged_in, only: [:index, :show, :new]
+
   def index
-    @tasks = Task.all.order(created_at: :desc)
+    @tasks = current_user.tasks.order(created_at: :desc)
   end
 
 
   def show
-    @task = Task.find(params[:id])
+    @task = current_user.tasks.find(params[:id])
   end
 
 
@@ -15,9 +17,10 @@ class TasksController < ApplicationController
 
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
     if @task.save
-      redirect_to new_task_url
+      flash[:success] = "タスクを作成しました"
+      redirect_to tasks_url
       # tasks_url
     else
       flash.now[:danger] = "作成に失敗しました"
@@ -27,13 +30,14 @@ class TasksController < ApplicationController
 
 
   def edit
-    @task = Task.find(params[:id])
+    @task = current_user.tasks.find(params[:id])
   end
 
 
   def update
-    @task = Task.find(params[:id])
+    @task = current_user.tasks.find(params[:id])
     if @task.update(task_params)
+      flash[:success] = "タスクを更新しました"
       redirect_to @task
     else
       flash.now[:danger] = "タスクを更新できませんでした"
@@ -43,7 +47,7 @@ class TasksController < ApplicationController
 
 
   def destroy
-    @task = Task.find(params[:id])
+    @task = current_user.tasks.find(params[:id])
     @task.destroy
 
     flash[:success] = "削除されました"
